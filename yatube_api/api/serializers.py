@@ -5,7 +5,6 @@ from posts.models import Comment, Follow, Group, Post, User
 
 
 class PostSerializer(serializers.ModelSerializer):
-
     author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
@@ -21,7 +20,6 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-
     author = serializers.SlugRelatedField(
         read_only=True,
         slug_field='username',
@@ -34,14 +32,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-
     user = serializers.SlugRelatedField(
         read_only=True,
         slug_field='username',
         default=fields.CurrentUserDefault()
     )
     following = serializers.SlugRelatedField(
-        read_only=False,
         slug_field='username',
         queryset=User.objects.all()
     )

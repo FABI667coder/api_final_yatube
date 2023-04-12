@@ -56,3 +56,13 @@ class Follow(models.Model):
         related_name='following',
         verbose_name='Автор'
     )
+
+    class Meta:
+        models.UniqueConstraint(
+            fields=['user', 'following'],
+            name='unique_follower'
+        )
+        models.CheckConstraint(
+            check=~models.Q(user=models.F('following')),
+            name='sub_to_themselves'
+        )
