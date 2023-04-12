@@ -5,7 +5,6 @@ User = get_user_model()
 
 
 class Group(models.Model):
-
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField()
@@ -15,7 +14,6 @@ class Group(models.Model):
 
 
 class Post(models.Model):
-
     text = models.TextField()
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     author = models.ForeignKey(
@@ -32,7 +30,6 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='comments')
     post = models.ForeignKey(
@@ -43,7 +40,6 @@ class Comment(models.Model):
 
 
 class Follow(models.Model):
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -58,11 +54,13 @@ class Follow(models.Model):
     )
 
     class Meta:
-        models.UniqueConstraint(
-            fields=['user', 'following'],
-            name='unique_follower'
-        )
-        models.CheckConstraint(
-            check=~models.Q(user=models.F('following')),
-            name='sub_to_themselves'
-        )
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'following'],
+                name='unique_follower'
+            ),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('following')),
+                name='sub_to_themselves'
+            ),
+        ]
